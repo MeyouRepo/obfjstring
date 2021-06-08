@@ -12,12 +12,15 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class':'ObfuseJarStringGradle'
+        attributes 'Main-Class': 'ObfuseJarStringGradle'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
