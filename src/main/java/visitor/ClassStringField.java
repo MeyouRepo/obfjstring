@@ -1,5 +1,7 @@
 package visitor;
 
+import me.liangchengj.obfjstring.StringFieldOfClass;
+
 /**
  * The String fields in class.
  *
@@ -8,7 +10,7 @@ package visitor;
  */
 public class ClassStringField {
 
-  public static final String STRING_DESC = "Ljava/lang/String;";
+  public static final String STRING_DESC = StringFieldOfClass.STRING_SIG;
 
   public ClassStringField(String name, String value) {
     this.name = name;

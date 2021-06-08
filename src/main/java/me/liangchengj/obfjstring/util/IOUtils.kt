@@ -27,6 +27,8 @@ object IOUtils {
                 }
             }
         }
+        close(outputStream)
+        close(inputStream)
     }
 
 

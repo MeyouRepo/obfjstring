@@ -1,32 +1,31 @@
 package com;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import me.liangchengj.obfjstring.JavaStringObfuscator;
+import me.liangchengj.obfjstring.RSA;
+
 /** Created by qtfreet on 2017/2/24. */
 public final class OooOO0OO {
-  private OooOO0OO(){}
+  private OooOO0OO() {}
 
-  /** 将字符串编码成16进制数字,适用于所有字符（包括中文） */
-  public static byte[] encode(byte[] bytes, String key) {
-    // 根据默认编码获取字节数组
-
-    int len = bytes.length;
-    int keyLen = key.length();
-    for (int i = 0; i < len; i++) {
-      // 对每个字节进行异或
-      bytes[i] = (byte) (bytes[i] ^ key.charAt(i % keyLen));
+  public static byte[] encrypt(String s, String key) {
+    ByteArrayInputStream bais = new ByteArrayInputStream(key.getBytes());
+    try {
+      RSA.PublicKey publicKey = RSA.PublicKey.form(bais);
+      return JavaStringObfuscator.encrypt(s, publicKey);
+    } catch (IOException e) {
+      throw new AssertionError(e);
     }
-
-    return bytes;
   }
 
-  /** 将16进制数字解码成字符串,适用于所有字符（包括中文） */
   public static String OooOOoo0oo(byte[] bytes, String key) {
-    int len = bytes.length;
-    int keyLen = key.length();
-    for (int i = 0; i < len; i++) {
-      // 对每个字节进行异或
-      bytes[i] = (byte) (bytes[i] ^ key.charAt(i % keyLen));
+    ByteArrayInputStream bais = new ByteArrayInputStream(key.getBytes());
+    try {
+      RSA.PrivateKey privateKey = RSA.PrivateKey.form(bais);
+      return JavaStringObfuscator.decrypt(bytes, privateKey);
+    } catch (IOException e) {
+      throw new AssertionError(e);
     }
-
-    return new String(bytes);
   }
 }

@@ -3,8 +3,8 @@ package visitor;
 import com.OooOO0OO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import me.liangchengj.obfjstring.TextUtils;
+import me.liangchengj.obfjstring.RSA;
+import me.liangchengj.obfjstring.util.TextUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -39,8 +39,8 @@ public class StringFieldClassVisitor extends ClassVisitor {
   }
 
   private void encode(MethodVisitor mv, String str) {
-    String mKey = UUID.randomUUID().toString().replace("-", "").trim().substring(0, 6);
-    byte[] enc = OooOO0OO.encode(str.getBytes(), mKey);
+    RSA.KeyPair keyPair = RSA.genKeyPair();
+    byte[] enc = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
     int len = enc.length;
     mv.visitIntInsn(Opcodes.SIPUSH, len);
     mv.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_BYTE);
@@ -50,7 +50,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
       mv.visitIntInsn(Opcodes.BIPUSH, enc[i]);
       mv.visitInsn(Opcodes.BASTORE);
     }
-    mv.visitLdcInsn(mKey);
+    mv.visitLdcInsn(keyPair.getPrivateKey().toString());
     mv.visitMethodInsn(
         Opcodes.INVOKESTATIC,
         Xor_FLAG,

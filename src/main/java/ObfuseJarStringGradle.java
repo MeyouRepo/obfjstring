@@ -1,6 +1,5 @@
+import android.util.Base64;
 import com.OooOO0OO;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,14 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import me.liangchengj.obfjstring.JavaStringObfuscator;
+import me.liangchengj.obfjstring.RSA;
+import me.liangchengj.obfjstring.util.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -23,8 +19,9 @@ import visitor.ClassVisitorFactory;
 
 /** Created by qtfreet on 2017/3/14. */
 public class ObfuseJarStringGradle {
-  private static final String encryptFile = OooOO0OO.class.getName().replace(".", "/") + ".class";
-  private static final String separator = File.separator;
+  //  private static final String encryptFile = OooOO0OO.class.getName().replace(".", "/") +
+  // ".class";
+  //  private static final String separator = File.separator;
   private static final String PARAMS_ORDER = "params [module] [variant]";
   private static List<String> filelist = new ArrayList();
 
@@ -34,8 +31,8 @@ public class ObfuseJarStringGradle {
       System.exit(0);
       return;
     }
-    byte b[] = readClass();
-    String module = args[0];
+    //    byte b[] = readClass();
+    //    String module = args[0];
     String variant = args[1];
     if (variant == null) {
       System.out.println("variant not detected; try " + PARAMS_ORDER);
@@ -53,25 +50,79 @@ public class ObfuseJarStringGradle {
     for (String path : filelist) {
       processFile(path);
     }
-    String encFilePath = variant + separator + encryptFile;
-    write(encFilePath, b);
+    //    String encFilePath = variant + separator + encryptFile;
+    //    write(encFilePath, b);
+
+    writeDepClassToVariant(variant, OooOO0OO.class);
+    writeDepClassToVariant(variant, JavaStringObfuscator.class);
+    writeDepClassToVariant(variant, Base64.class);
+    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Coder.class");
+    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Decoder.class");
+    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Encoder.class");
+    writeDepClassToVariant(variant, RSA.class);
+    writeDepClassToVariant(variant, RSA.KeyPair.class);
+    writeDepClassToVariant(variant, RSA.PrivateKey.class);
+    writeDepClassToVariant(variant, RSA.PublicKey.class);
+
     System.err.println("task completed");
   }
 
-  private static byte[] readClass() {
-    InputStream in = null;
-    try {
-      in = OooOO0OO.class.getClassLoader().getResourceAsStream(encryptFile);
-      int len = in.available();
-      byte[] b = new byte[len];
-      in.read(b);
-      in.close();
-      return b;
-    } catch (Exception e) {
-      e.printStackTrace();
+  private static void writeDepClassToVariant(String variant, Class<?> clazz) throws IOException {
+    String classFilePath = clazz.getName().replace(".", "/") + ".class";
+    ClassLoader classLoader = clazz.getClassLoader();
+    writeDepClassToVariant(variant, classLoader, classFilePath);
+    int i = 1;
+    while (true) {
+      try {
+        String tryClassFilePath =
+            String.format(
+                "%s$%d.class", classFilePath.substring(0, classFilePath.lastIndexOf('.')), i);
+        writeDepClassToVariant(variant, classLoader, tryClassFilePath);
+        i++;
+      } catch (Throwable tr) {
+        return;
+      }
     }
-    return null;
   }
+
+  private static void writeDepClassToVariant(
+      String variant, ClassLoader classLoader, String classFilePath) throws IOException {
+    System.out.println("classFilePath >> " + classFilePath);
+    String separatorClassFilePath = classFilePath.replace("/", File.separator);
+    String[] dirs = separatorClassFilePath.split(File.separator);
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < dirs.length - 1; i++) {
+      sb.append(dirs[i]);
+      sb.append(File.separator);
+      File file = new File(variant + File.separator + sb.toString());
+      if (!file.exists()) {
+        file.mkdirs();
+      }
+    }
+
+    InputStream in = classLoader.getResourceAsStream(classFilePath);
+    if (null == in) {
+      throw new NullPointerException("null == in");
+    }
+    String variantClassFilePath = variant + File.separator + separatorClassFilePath;
+    FileOutputStream fos = new FileOutputStream(variantClassFilePath);
+    IOUtils.readAndWrite(in, fos);
+  }
+
+  //  private static byte[] readClass() {
+  //    InputStream in = null;
+  //    try {
+  //      in = OooOO0OO.class.getClassLoader().getResourceAsStream(encryptFile);
+  //      int len = in.available();
+  //      byte[] b = new byte[len];
+  //      in.read(b);
+  //      in.close();
+  //      return b;
+  //    } catch (Exception e) {
+  //      e.printStackTrace();
+  //    }
+  //    return null;
+  //  }
 
   private static void processFile(String path) throws IOException {
     FileInputStream fis = new FileInputStream(path);
@@ -92,48 +143,49 @@ public class ObfuseJarStringGradle {
     }
   }
 
-  private static void processJar(
-      File jarIn, File jarOut, Charset charsetIn, Charset charsetOut, byte[] out)
-      throws IOException {
-    ZipInputStream zis = null;
-    ZipOutputStream zos = null;
-    try {
-      zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(jarIn)), charsetIn);
-      zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(jarOut)), charsetOut);
-      ZipEntry entryIn;
-      Map<String, Integer> processedEntryNamesMap = new HashMap<>();
-      boolean flag = false;
-      while ((entryIn = zis.getNextEntry()) != null) {
-        final String entryName = entryIn.getName();
-        if (!processedEntryNamesMap.containsKey(entryName)) {
-          ZipEntry entryOut = new ZipEntry(entryIn);
-          entryOut.setCompressedSize(-1);
-          zos.putNextEntry(entryOut);
-          if (!entryIn.isDirectory()) {
-            if (entryName.endsWith(".class")) {
-              if (entryName.equals(encryptFile)) {
-                flag = true;
-              }
-              processClass(zis, zos);
-            } else {
-              copy(zis, zos);
-            }
-          }
-          zos.closeEntry();
-          processedEntryNamesMap.put(entryName, 1);
-        }
-      }
-      if (!flag) {
-        ZipEntry eninject = new ZipEntry(encryptFile);
-        zos.putNextEntry(eninject);
-        zos.write(out);
-        zos.closeEntry();
-      }
-    } finally {
-      closeQuietly(zos);
-      closeQuietly(zis);
-    }
-  }
+  //  private static void processJar(
+  //      File jarIn, File jarOut, Charset charsetIn, Charset charsetOut, byte[] out)
+  //      throws IOException {
+  //    ZipInputStream zis = null;
+  //    ZipOutputStream zos = null;
+  //    try {
+  //      zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(jarIn)), charsetIn);
+  //      zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(jarOut)),
+  // charsetOut);
+  //      ZipEntry entryIn;
+  //      Map<String, Integer> processedEntryNamesMap = new HashMap<>();
+  //      boolean flag = false;
+  //      while ((entryIn = zis.getNextEntry()) != null) {
+  //        final String entryName = entryIn.getName();
+  //        if (!processedEntryNamesMap.containsKey(entryName)) {
+  //          ZipEntry entryOut = new ZipEntry(entryIn);
+  //          entryOut.setCompressedSize(-1);
+  //          zos.putNextEntry(entryOut);
+  //          if (!entryIn.isDirectory()) {
+  //            if (entryName.endsWith(".class")) {
+  //              if (entryName.equals(encryptFile)) {
+  //                flag = true;
+  //              }
+  //              processClass(zis, zos);
+  //            } else {
+  //              copy(zis, zos);
+  //            }
+  //          }
+  //          zos.closeEntry();
+  //          processedEntryNamesMap.put(entryName, 1);
+  //        }
+  //      }
+  //      if (!flag) {
+  //        ZipEntry eninject = new ZipEntry(encryptFile);
+  //        zos.putNextEntry(eninject);
+  //        zos.write(out);
+  //        zos.closeEntry();
+  //      }
+  //    } finally {
+  //      closeQuietly(zos);
+  //      closeQuietly(zis);
+  //    }
+  //  }
 
   private static void processClass(InputStream classIn, OutputStream classOut) throws IOException {
     ClassReader cr = new ClassReader(classIn);
