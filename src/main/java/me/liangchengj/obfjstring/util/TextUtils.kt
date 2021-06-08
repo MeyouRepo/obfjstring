@@ -1,4 +1,4 @@
-package me.liangchengj.obfjstring
+package me.liangchengj.obfjstring.util
 
 object TextUtils {
     /**
