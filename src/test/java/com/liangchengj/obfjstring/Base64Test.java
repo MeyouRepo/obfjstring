@@ -1,4 +1,4 @@
-package me.liangchengj.obfjstring;
+package com.liangchengj.obfjstring;
 
 import org.junit.jupiter.api.Test;
 

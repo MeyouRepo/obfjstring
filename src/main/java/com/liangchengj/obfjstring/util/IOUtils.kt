@@ -1,4 +1,4 @@
-package me.liangchengj.obfjstring.util
+package com.liangchengj.obfjstring.util
 
 import java.io.Closeable
 import java.io.InputStream

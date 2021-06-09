@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.20-M1'
 }
 
-group 'me.liangchengj.obfuscate-java-string'
+group 'com.liangchengj'
 version '1.0-SNAPSHOT'
 
 repositories {

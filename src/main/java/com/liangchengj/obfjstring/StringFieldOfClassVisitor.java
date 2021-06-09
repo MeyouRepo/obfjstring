@@ -1,3 +1,3 @@
-package me.liangchengj.obfjstring;
+package com.liangchengj.obfjstring;
 
 public class StringFieldOfClassVisitor {}

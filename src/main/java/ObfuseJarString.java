@@ -1,4 +1,4 @@
-import me.liangchengj.obfjstring.OooOO0OO;
+import com.liangchengj.obfjstring.OooOO0OO;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;

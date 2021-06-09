@@ -1,6 +1,6 @@
 package visitor;
 
-import me.liangchengj.obfjstring.OooOO0OO;
+import com.liangchengj.obfjstring.OooOO0OO;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;

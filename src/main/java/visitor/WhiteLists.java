@@ -1,8 +1,8 @@
 package visitor;
 
+import com.liangchengj.obfjstring.util.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
-import me.liangchengj.obfjstring.util.TextUtils;
 
 /**
  * The white list contains some ignored levels. We defined some popular library domains and classes

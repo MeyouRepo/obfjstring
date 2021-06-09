@@ -1,4 +1,4 @@
-package me.liangchengj.obfjstring;
+package com.liangchengj.obfjstring;
 
 import java.nio.charset.StandardCharsets;
 

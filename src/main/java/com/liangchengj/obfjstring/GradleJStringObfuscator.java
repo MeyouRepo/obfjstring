@@ -1,4 +1,4 @@
-package me.liangchengj.obfjstring;
+package com.liangchengj.obfjstring;
 
 /**
  * Created at 2021/6/9 11:16.

@@ -1,12 +1,12 @@
 package visitor;
 
+import com.liangchengj.obfjstring.JavaStringObfuscator;
+import com.liangchengj.obfjstring.OooOO0OO;
+import com.liangchengj.obfjstring.RSA;
+import com.liangchengj.obfjstring.StringFieldOfClass;
+import com.liangchengj.obfjstring.util.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
-import me.liangchengj.obfjstring.JavaStringObfuscator;
-import me.liangchengj.obfjstring.OooOO0OO;
-import me.liangchengj.obfjstring.RSA;
-import me.liangchengj.obfjstring.StringFieldOfClass;
-import me.liangchengj.obfjstring.util.TextUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
