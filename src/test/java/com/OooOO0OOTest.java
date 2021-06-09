@@ -118,5 +118,15 @@ class OooOO0OOTest {
                     new ByteArrayInputStream(
                         "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJ2mYmeNegllKcxe3dvi7hu50SsEAtIkuFcHBN+Veeaf0btKi4HCKF6zM2HX2W/wflJE/Yv0VlzkRasrixXTgYyWMrhQ6q/OiFLtKc6Kd5WJeh25lHuTl1eBuoFwn003TdQ5GEffE2nS8sodnZlGgWxxaWNpv5DVGvYA7u4EbG33AgMBAAECgYB7I1k9tT4bVI9feMImXIzLz0pYJRvm9JOgNnVSBrlesHrrpgBt7DAIOETsKeNHEjw5GnZI+SL0D8FzP+G1vK003CAqAtsLt1N7QT7EgF2lNj2UpkUkO8J27AfGZ3AzAsm3jw1yo4jvqzRtcL0FvFGU6A6T1r0R/Czo1ORvu6ZJMQJBAOTvrt1Jnqw5ovjREpNLTZ8l+tHCyx13EGE+btT/THr2kvjozj+yz9OCrvW715oxQQrDsO4VU3wqVy1j05FegTsCQQCwSVuDOhgNsoYfZ6iOWg1N8bPidYdecB65/bxgABbilazjTWHpu+dDHuMRqksX3hnjrJvsDWpXCPrqUkyRnDp1AkBfwbEOdgCcYO89y5VNbq3k52nl2uhCRs7fHdIV3UMMG56V5ip+kjhDa+HqfstLf1aJPhj/PIRS5xLXtW2E3FaJAkBX4YoUZj6dfXTtbQCTToM5axfw+gQs6Rn4QGzLMuA1vsX8XpREMB8+z8QFB27+DAO+A0uLprhvgRONAtAW+toNAkBtbtKZNpGjFV4wlR2rHiircbzcEOHQpsKA1Tmhuo80DfU+Ga76mqwIBItap+pci+89aMn7A4FHADjp5jHIruJj"
                             .getBytes())))));
+
+    System.out.println(
+        new String(
+            RSA.decrypt(
+                "FrzpGlNREkjvkvdmAait4BbOiJYXUG8rid/AC4rXwwfvuL5zhqLAjKJ/ES1dsPz5aw76MSYW0+rHIwZ97/kkV3jEVq5PYhK0htA1XamgdnVQ6yaupvmJO2MDLqj4/aKEuInFEfnbi6bmz4zk95zWnI1qqpm11XaNNYiefubbTbI="
+                    .getBytes(),
+                RSA.PrivateKey.form(
+                    new ByteArrayInputStream(
+                        "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJ2mYmeNegllKcxe3dvi7hu50SsEAtIkuFcHBN+Veeaf0btKi4HCKF6zM2HX2W/wflJE/Yv0VlzkRasrixXTgYyWMrhQ6q/OiFLtKc6Kd5WJeh25lHuTl1eBuoFwn003TdQ5GEffE2nS8sodnZlGgWxxaWNpv5DVGvYA7u4EbG33AgMBAAECgYB7I1k9tT4bVI9feMImXIzLz0pYJRvm9JOgNnVSBrlesHrrpgBt7DAIOETsKeNHEjw5GnZI+SL0D8FzP+G1vK003CAqAtsLt1N7QT7EgF2lNj2UpkUkO8J27AfGZ3AzAsm3jw1yo4jvqzRtcL0FvFGU6A6T1r0R/Czo1ORvu6ZJMQJBAOTvrt1Jnqw5ovjREpNLTZ8l+tHCyx13EGE+btT/THr2kvjozj+yz9OCrvW715oxQQrDsO4VU3wqVy1j05FegTsCQQCwSVuDOhgNsoYfZ6iOWg1N8bPidYdecB65/bxgABbilazjTWHpu+dDHuMRqksX3hnjrJvsDWpXCPrqUkyRnDp1AkBfwbEOdgCcYO89y5VNbq3k52nl2uhCRs7fHdIV3UMMG56V5ip+kjhDa+HqfstLf1aJPhj/PIRS5xLXtW2E3FaJAkBX4YoUZj6dfXTtbQCTToM5axfw+gQs6Rn4QGzLMuA1vsX8XpREMB8+z8QFB27+DAO+A0uLprhvgRONAtAW+toNAkBtbtKZNpGjFV4wlR2rHiircbzcEOHQpsKA1Tmhuo80DfU+Ga76mqwIBItap+pci+89aMn7A4FHADjp5jHIruJj"
+                            .getBytes())))));
   }
 }
