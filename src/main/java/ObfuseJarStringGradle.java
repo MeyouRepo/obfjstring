@@ -1,5 +1,4 @@
-import android.util.Base64;
-import com.OooOO0OO;
+import me.liangchengj.obfjstring.OooOO0OO;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;

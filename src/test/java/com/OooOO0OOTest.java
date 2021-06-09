@@ -2,6 +2,7 @@ package com;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import me.liangchengj.obfjstring.OooOO0OO;
 import me.liangchengj.obfjstring.RSA;
 import org.junit.jupiter.api.Test;
 

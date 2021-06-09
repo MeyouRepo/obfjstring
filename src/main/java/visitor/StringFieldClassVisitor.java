@@ -1,6 +1,6 @@
 package visitor;
 
-import com.OooOO0OO;
+import me.liangchengj.obfjstring.OooOO0OO;
 import java.util.ArrayList;
 import java.util.List;
 import me.liangchengj.obfjstring.RSA;
