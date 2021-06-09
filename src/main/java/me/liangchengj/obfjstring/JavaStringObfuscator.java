@@ -1,5 +1,7 @@
 package me.liangchengj.obfjstring;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Cated at 2021/6/8 19:02.
  *
