@@ -1,10 +1,11 @@
 package visitor;
 
-import me.liangchengj.obfjstring.JavaStringObfuscator;
-import me.liangchengj.obfjstring.OooOO0OO;
 import java.util.ArrayList;
 import java.util.List;
+import me.liangchengj.obfjstring.JavaStringObfuscator;
+import me.liangchengj.obfjstring.OooOO0OO;
 import me.liangchengj.obfjstring.RSA;
+import me.liangchengj.obfjstring.StringFieldOfClass;
 import me.liangchengj.obfjstring.util.TextUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
@@ -21,14 +22,14 @@ import org.objectweb.asm.Opcodes;
  */
 public class StringFieldClassVisitor extends ClassVisitor {
 
-  private static final String IGNORE_ANNOTATION = "Lcom/qtfreet/lib/annotation/StringIgnore;";
+  private static final String IGNORE_ANNOTATION = "Landroid/support/annotation/Keep;";
 
   private boolean isClInitExists;
 
-  private List<ClassStringField> mStaticFinalFields = new ArrayList<>();
-  private List<ClassStringField> mStaticFields = new ArrayList<>();
-  private List<ClassStringField> mFinalFields = new ArrayList<>();
-  private List<ClassStringField> mFields = new ArrayList<>();
+  private List<StringFieldOfClass> mStaticFinalFields = new ArrayList<>();
+  private List<StringFieldOfClass> mStaticFields = new ArrayList<>();
+  private List<StringFieldOfClass> mFinalFields = new ArrayList<>();
+  private List<StringFieldOfClass> mFields = new ArrayList<>();
 
   private String mClassName;
 
@@ -55,7 +56,8 @@ public class StringFieldClassVisitor extends ClassVisitor {
         Opcodes.INVOKESTATIC,
         JavaStringObfuscator.getJniStyleClassName(OooOO0OO.class),
         "OooOOoo0oo",
-        "([BLjava/lang/String;)Ljava/lang/String;",
+        String.format(
+            "(%s%s)%s", "[B", StringFieldOfClass.STRING_DESC, StringFieldOfClass.STRING_DESC),
         false);
   }
 
@@ -68,7 +70,6 @@ public class StringFieldClassVisitor extends ClassVisitor {
       String superName,
       String[] interfaces) {
     this.mClassName = name;
-    //        System.out.println("processClass: " + mClassName);
     super.visit(version, access, name, signature, superName, interfaces);
   }
 
@@ -81,27 +82,27 @@ public class StringFieldClassVisitor extends ClassVisitor {
   @Override
   public FieldVisitor visitField(
       int access, String name, String desc, String signature, Object value) {
-    if (ClassStringField.STRING_DESC.equals(desc) && name != null && !mIgnoreClass) {
+    if (StringFieldOfClass.STRING_DESC.equals(desc) && name != null && !mIgnoreClass) {
       // static final, in this condition, the value is null or not null.
       if ((access & Opcodes.ACC_STATIC) != 0 && (access & Opcodes.ACC_FINAL) != 0) {
-        mStaticFinalFields.add(new ClassStringField(name, (String) value));
+        mStaticFinalFields.add(new StringFieldOfClass(name, (String) value));
         value = null;
       }
       // static, in this condition, the value is null.
       if ((access & Opcodes.ACC_STATIC) != 0 && (access & Opcodes.ACC_FINAL) == 0) {
-        mStaticFields.add(new ClassStringField(name, (String) value));
+        mStaticFields.add(new StringFieldOfClass(name, (String) value));
         value = null;
       }
 
       // final, in this condition, the value is null or not null.
       if ((access & Opcodes.ACC_STATIC) == 0 && (access & Opcodes.ACC_FINAL) != 0) {
-        mFinalFields.add(new ClassStringField(name, (String) value));
+        mFinalFields.add(new StringFieldOfClass(name, (String) value));
         value = null;
       }
 
       // normal, in this condition, the value is null.
       if ((access & Opcodes.ACC_STATIC) != 0 && (access & Opcodes.ACC_FINAL) != 0) {
-        mFields.add(new ClassStringField(name, (String) value));
+        mFields.add(new StringFieldOfClass(name, (String) value));
         value = null;
       }
     }
@@ -126,14 +127,17 @@ public class StringFieldClassVisitor extends ClassVisitor {
               public void visitCode() {
                 super.visitCode();
                 // Here init static final fields.
-                for (ClassStringField field : mStaticFinalFields) {
-                  if (field.value == null) {
+                for (StringFieldOfClass field : mStaticFinalFields) {
+                  if (field.getValue() == null) {
                     continue;
                   }
-                  doObfuscate(super.mv, field.value);
+                  doObfuscate(super.mv, field.getValue());
 
                   super.visitFieldInsn(
-                      Opcodes.PUTSTATIC, mClassName, field.name, ClassStringField.STRING_DESC);
+                      Opcodes.PUTSTATIC,
+                      mClassName,
+                      field.getName(),
+                      StringFieldOfClass.STRING_DESC);
                 }
               }
 
@@ -157,16 +161,16 @@ public class StringFieldClassVisitor extends ClassVisitor {
               public void visitFieldInsn(int opcode, String owner, String name, String desc) {
                 if (mClassName.equals(owner) && lastStashCst != null) {
                   boolean isContain = false;
-                  for (ClassStringField field : mStaticFields) {
-                    if (field.name.equals(name)) {
+                  for (StringFieldOfClass field : mStaticFields) {
+                    if (field.getName().equals(name)) {
                       isContain = true;
                       break;
                     }
                   }
                   if (!isContain) {
-                    for (ClassStringField field : mStaticFinalFields) {
-                      if (field.name.equals(name) && field.value == null) {
-                        field.value = lastStashCst;
+                    for (StringFieldOfClass field : mStaticFinalFields) {
+                      if (field.getName().equals(name) && field.getValue() == null) {
+                        field.setValue(lastStashCst);
                         break;
                       }
                     }
@@ -203,20 +207,26 @@ public class StringFieldClassVisitor extends ClassVisitor {
                     && cst instanceof String
                     && !TextUtils.isEmptyAfterTrim((String) cst)) {
                   // If the value is a static final field
-                  for (ClassStringField field : mStaticFinalFields) {
-                    if (cst.equals(field.value)) {
+                  for (StringFieldOfClass field : mStaticFinalFields) {
+                    if (cst.equals(field.getValue())) {
                       super.visitFieldInsn(
-                          Opcodes.GETSTATIC, mClassName, field.name, ClassStringField.STRING_DESC);
+                          Opcodes.GETSTATIC,
+                          mClassName,
+                          field.getName(),
+                          StringFieldOfClass.STRING_DESC);
                       return;
                     }
                   }
                   // If the value is a final field (not static)
-                  for (ClassStringField field : mFinalFields) {
+                  for (StringFieldOfClass field : mFinalFields) {
                     // if the value of a final field is null, we ignore it
-                    if (cst.equals(field.value)) {
+                    if (cst.equals(field.getValue())) {
                       super.visitVarInsn(Opcodes.ALOAD, 0);
                       super.visitFieldInsn(
-                          Opcodes.GETFIELD, mClassName, field.name, "Ljava/lang/String;");
+                          Opcodes.GETFIELD,
+                          mClassName,
+                          field.getName(),
+                          StringFieldOfClass.STRING_DESC);
                       return;
                     }
                   }
@@ -237,12 +247,13 @@ public class StringFieldClassVisitor extends ClassVisitor {
       MethodVisitor mv = super.visitMethod(Opcodes.ACC_STATIC, "<clinit>", "()V", null, null);
       mv.visitCode();
       // Here init static final fields.
-      for (ClassStringField field : mStaticFinalFields) {
-        if (field.value == null) {
+      for (StringFieldOfClass field : mStaticFinalFields) {
+        if (field.getValue() == null) {
           continue; // It could not be happened
         }
-        doObfuscate(mv, field.value);
-        mv.visitFieldInsn(Opcodes.PUTSTATIC, mClassName, field.name, ClassStringField.STRING_DESC);
+        doObfuscate(mv, field.getValue());
+        mv.visitFieldInsn(
+            Opcodes.PUTSTATIC, mClassName, field.getName(), StringFieldOfClass.STRING_DESC);
       }
       mv.visitInsn(Opcodes.RETURN);
       mv.visitMaxs(1, 0);
