@@ -55,7 +55,21 @@ public class ObfuseJarStringGradle {
 
     writeDepClassToVariant(variant, OooOO0OO.class);
     writeDepClassToVariant(variant, JavaStringObfuscator.class);
-    writeDepClassToVariant(variant, Base64.class);
+
+    Class<?> base64Class = Base64.class;
+    writeDepClassToVariant(variant, base64Class);
+    writeDepClassToVariant(
+        variant,
+        base64Class.getClassLoader(),
+        String.format(
+            "%s$%s%s",
+            JavaStringObfuscator.getJniStyleClassName(base64Class),
+            "1FieldReflection",
+            JavaStringObfuscator.JAVA_CLASS_FILE_EXT));
+    writeDepClassToVariant(variant, Base64.JDKBase64CodecType.class);
+    writeDepClassToVariant(variant, Base64.AndroidBase64CodecType.class);
+    writeDepClassToVariant(variant, Base64.AndroidBase64Flag.class);
+
     writeDepClassToVariant(variant, RSA.class);
     writeDepClassToVariant(variant, RSA.KeyPair.class);
     writeDepClassToVariant(variant, RSA.PrivateKey.class);
@@ -65,15 +79,20 @@ public class ObfuseJarStringGradle {
   }
 
   private static void writeDepClassToVariant(String variant, Class<?> clazz) throws IOException {
-    String classFilePath = clazz.getName().replace(".", "/") + ".class";
+    String classFilePath =
+        JavaStringObfuscator.getJniStyleClassName(clazz) + JavaStringObfuscator.JAVA_CLASS_FILE_EXT;
     ClassLoader classLoader = clazz.getClassLoader();
     writeDepClassToVariant(variant, classLoader, classFilePath);
+
     int i = 1;
     while (true) {
       try {
         String tryClassFilePath =
             String.format(
-                "%s$%d.class", classFilePath.substring(0, classFilePath.lastIndexOf('.')), i);
+                "%s$%d%s",
+                classFilePath.substring(0, classFilePath.lastIndexOf('.')),
+                i,
+                JavaStringObfuscator.JAVA_CLASS_FILE_EXT);
         writeDepClassToVariant(variant, classLoader, tryClassFilePath);
         i++;
       } catch (Throwable tr) {
