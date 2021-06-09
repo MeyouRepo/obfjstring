@@ -38,7 +38,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
     super(Opcodes.ASM5, cw);
   }
 
-  private void encode(MethodVisitor mv, String str) {
+  private void doObfuscate(MethodVisitor mv, String str) {
     RSA.KeyPair keyPair = RSA.genKeyPair();
     byte[] enc = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
     int len = enc.length;
@@ -130,7 +130,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
                   if (field.value == null) {
                     continue;
                   }
-                  encode(super.mv, field.value);
+                  doObfuscate(super.mv, field.value);
 
                   super.visitFieldInsn(
                       Opcodes.PUTSTATIC, mClassName, field.name, ClassStringField.STRING_DESC);
@@ -145,7 +145,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
                     && cst instanceof String
                     && !TextUtils.isEmptyAfterTrim((String) cst)) {
                   lastStashCst = (String) cst;
-                  encode(super.mv, lastStashCst);
+                  doObfuscate(super.mv, lastStashCst);
 
                 } else {
                   lastStashCst = null;
@@ -187,7 +187,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
                 if (cst != null
                     && cst instanceof String
                     && !TextUtils.isEmptyAfterTrim((String) cst)) {
-                  encode(super.mv, (String) cst);
+                  doObfuscate(super.mv, (String) cst);
                 } else {
                   super.visitLdcInsn(cst);
                 }
@@ -220,7 +220,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
                       return;
                     }
                   }
-                  encode(super.mv, (String) cst);
+                  doObfuscate(super.mv, (String) cst);
                   return;
                 }
                 super.visitLdcInsn(cst);
@@ -241,7 +241,7 @@ public class StringFieldClassVisitor extends ClassVisitor {
         if (field.value == null) {
           continue; // It could not be happened
         }
-        encode(mv, field.value);
+        doObfuscate(mv, field.value);
         mv.visitFieldInsn(Opcodes.PUTSTATIC, mClassName, field.name, ClassStringField.STRING_DESC);
       }
       mv.visitInsn(Opcodes.RETURN);
