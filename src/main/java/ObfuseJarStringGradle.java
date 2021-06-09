@@ -90,7 +90,6 @@ public class ObfuseJarStringGradle {
 
   private static void writeDepClassToVariant(
       String variant, ClassLoader classLoader, String classFilePath) throws IOException {
-    System.out.println("classFilePath >> " + classFilePath);
     String separatorClassFilePath = classFilePath.replace("/", File.separator);
     String[] dirs = separatorClassFilePath.split(File.separator);
     StringBuilder sb = new StringBuilder();
@@ -107,7 +106,9 @@ public class ObfuseJarStringGradle {
     if (null == in) {
       throw new NullPointerException("null == in");
     }
+    System.out.println("classFilePath >> " + classFilePath);
     String variantClassFilePath = variant + File.separator + separatorClassFilePath;
+    System.out.println("variantClassFilePath >> " + variantClassFilePath);
     FileOutputStream fos = new FileOutputStream(variantClassFilePath);
     IOUtils.readAndWrite(in, fos);
   }
