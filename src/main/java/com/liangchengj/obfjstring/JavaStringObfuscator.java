@@ -30,12 +30,12 @@ public final class JavaStringObfuscator {
     return new String(AES.decrypt(bytes, key, iv), StandardCharsets.UTF_8);
   }
 
-  public static String getJniStyleClassName(Class<?> clazz) {
+  public static String getJNIStyleClassName(Class<?> clazz) {
     return clazz.getName().replace('.', '/');
   }
 
-  public static String getJniStyleShortClassName(Class<?> clazz) {
-    String jniStyleClassName = getJniStyleClassName(clazz);
+  public static String getJNIStyleShortClassName(Class<?> clazz) {
+    String jniStyleClassName = getJNIStyleClassName(clazz);
     return jniStyleClassName.substring(jniStyleClassName.lastIndexOf('/') + 1);
   }
 

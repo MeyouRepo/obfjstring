@@ -58,14 +58,14 @@ public class StringFieldClassVisitor extends ClassVisitor {
     mv.visitLdcInsn(iv);
     mv.visitMethodInsn(
         Opcodes.INVOKESTATIC,
-        JavaStringObfuscator.getJniStyleClassName(OooOO0OO.class),
+        JavaStringObfuscator.getJNIStyleClassName(OooOO0OO.class),
         "OooOOoo0oo",
         String.format(
             "(%s%s%s)%s",
             "[B",
-            StringFieldOfClass.STRING_DESC,
-            StringFieldOfClass.STRING_DESC,
-            StringFieldOfClass.STRING_DESC),
+            StringFieldOfClass.STRING_SIG,
+            StringFieldOfClass.STRING_SIG,
+            StringFieldOfClass.STRING_SIG),
         false);
   }
 

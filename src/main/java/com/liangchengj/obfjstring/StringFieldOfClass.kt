@@ -1,8 +1,12 @@
 package com.liangchengj.obfjstring
 
-
+/**
+ * Created at 2021/6/9 17:48.
+ *
+ * @author Liangcheng Juves
+ */
 data class StringFieldOfClass(
-    var name: String?,
+    var name: String,
     var value: String?
 ) {
     companion object {

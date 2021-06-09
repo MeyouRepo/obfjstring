@@ -1,4 +1,4 @@
-package com.liangchengj.obfjstring.util
+package com.liangchengj.obfjstring.io
 
 import java.io.Closeable
 import java.io.InputStream
@@ -9,12 +9,12 @@ import java.io.OutputStream
  *
  * @author Liangcheng Juves
  */
-object IOUtils {
+object Stream {
 
     @JvmStatic
     fun readAndWrite(inputStream: InputStream?, outputStream: OutputStream?) {
         val bytes = ByteArray(1024)
-        var len = 0
+        var len = -1
         inputStream.use { `in` ->
             outputStream.use { out ->
                 while (`in`?.read(bytes).also {

@@ -53,7 +53,7 @@ public final class WhiteLists {
   private WhiteLists() {}
 
   public static void addClassToWhiteList(Class<?> clazz) {
-    addWhiteList(JavaStringObfuscator.getJniStyleShortClassName(clazz), FLAG_CLASS);
+    addWhiteList(JavaStringObfuscator.getJNIStyleShortClassName(clazz), FLAG_CLASS);
   }
 
   public static void addWhiteList(String name, int flag) {

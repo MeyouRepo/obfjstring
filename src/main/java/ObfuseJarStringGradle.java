@@ -3,7 +3,7 @@ import com.liangchengj.obfjstring.Base64;
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.OooOO0OO;
 import com.liangchengj.obfjstring.RSA;
-import com.liangchengj.obfjstring.util.IOUtils;
+import com.liangchengj.obfjstring.io.Stream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -65,7 +65,7 @@ public class ObfuseJarStringGradle {
         base64Class.getClassLoader(),
         String.format(
             "%s$%s%s",
-            JavaStringObfuscator.getJniStyleClassName(base64Class),
+            JavaStringObfuscator.getJNIStyleClassName(base64Class),
             "1FieldReflection",
             JavaStringObfuscator.JAVA_CLASS_FILE_EXT));
     writeDepClassToVariant(variant, Base64.JDKBase64CodecType.class);
@@ -84,7 +84,7 @@ public class ObfuseJarStringGradle {
 
   private static void writeDepClassToVariant(String variant, Class<?> clazz) throws IOException {
     String classFilePath =
-        JavaStringObfuscator.getJniStyleClassName(clazz) + JavaStringObfuscator.JAVA_CLASS_FILE_EXT;
+        JavaStringObfuscator.getJNIStyleClassName(clazz) + JavaStringObfuscator.JAVA_CLASS_FILE_EXT;
     ClassLoader classLoader = clazz.getClassLoader();
     writeDepClassToVariant(variant, classLoader, classFilePath);
 
@@ -128,7 +128,7 @@ public class ObfuseJarStringGradle {
     System.out.println("variantClassFilePath >> " + variantClassFilePath);
     ByteArrayInputStream bais = new ByteArrayInputStream(processClass(in));
     FileOutputStream fos = new FileOutputStream(variantClassFilePath);
-    IOUtils.readAndWrite(bais, fos);
+    Stream.readAndWrite(bais, fos);
   }
 
   //  private static byte[] readClass() {

@@ -16,12 +16,13 @@ class JavaStringObfuscatorTest {
   }
 
   @Test
-  void getJniStyleClassName() {
-    System.out.println(JavaStringObfuscator.getJniStyleClassName(Base64.AndroidBase64Flag.class));
+  void getJNIStyleClassName() {
+    System.out.println(JavaStringObfuscator.getJNIStyleClassName(Base64.AndroidBase64Flag.class));
   }
 
   @Test
-  void getJniStyleShortClassName() {
-    System.out.println(JavaStringObfuscator.getJniStyleShortClassName(Base64.AndroidBase64Flag.class));
+  void getJNIStyleShortClassName() {
+    System.out.println(
+        JavaStringObfuscator.getJNIStyleShortClassName(Base64.AndroidBase64Flag.class));
   }
 }
