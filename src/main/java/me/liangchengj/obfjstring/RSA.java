@@ -1,6 +1,5 @@
 package me.liangchengj.obfjstring;
 
-import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,14 +48,14 @@ public abstract class RSA {
       keyPairGenerator.initialize(KEY_SIZE);
       java.security.KeyPair keyPair = keyPairGenerator.generateKeyPair();
       PublicKey publicKey =
-          new PublicKey(Base64.encodeToString(keyPair.getPublic().getEncoded(), Base64.NO_WRAP)) {
+          new PublicKey(Base64.encodeToString(keyPair.getPublic().getEncoded())) {
             @Override
             public int hashCode() {
               return super.hashCode();
             }
           };
       PrivateKey privateKey =
-          new PrivateKey(Base64.encodeToString(keyPair.getPrivate().getEncoded(), Base64.NO_WRAP)) {
+          new PrivateKey(Base64.encodeToString(keyPair.getPrivate().getEncoded())) {
             @Override
             public int hashCode() {
               return super.hashCode();
@@ -93,12 +92,12 @@ public abstract class RSA {
 
   public static byte[] encrypt(byte[] src, PublicKey publicKey) {
     try {
-      byte[] encodedKey = Base64.decode(publicKey.toString(), Base64.NO_WRAP);
+      byte[] encodedKey = Base64.decodeToBytes(publicKey.toString());
       Cipher cipher = instOf(Cipher.class);
       cipher.init(
           Cipher.ENCRYPT_MODE,
           instOf(KeyFactory.class).generatePublic(new X509EncodedKeySpec(encodedKey)));
-      return Base64.encode(loopCrypt(src, cipher, MAX_ENCRYPT_BLOCK), Base64.NO_WRAP);
+      return Base64.encodeToBytes(loopCrypt(src, cipher, MAX_ENCRYPT_BLOCK));
     } catch (InvalidKeyException
         | IllegalBlockSizeException
         | BadPaddingException
@@ -113,12 +112,12 @@ public abstract class RSA {
 
   public static byte[] decrypt(byte[] src, PrivateKey privateKey) {
     try {
-      byte[] encodedKey = Base64.decode(privateKey.toString(), Base64.NO_WRAP);
+      byte[] encodedKey = Base64.decodeToBytes(privateKey.toString());
       Cipher cipher = instOf(Cipher.class);
       cipher.init(
           Cipher.DECRYPT_MODE,
           instOf(KeyFactory.class).generatePrivate(new PKCS8EncodedKeySpec(encodedKey)));
-      return loopCrypt(Base64.decode(src, Base64.NO_WRAP), cipher, MAX_DECRYPT_BLOCK);
+      return loopCrypt(Base64.decodeToBytes(src), cipher, MAX_DECRYPT_BLOCK);
     } catch (InvalidKeyException
         | IllegalBlockSizeException
         | BadPaddingException
@@ -133,12 +132,12 @@ public abstract class RSA {
 
   public static boolean verify(byte[] src, byte[] signed, PublicKey publicKey) {
     try {
-      byte[] encodedKey = Base64.decode(publicKey.toString(), Base64.NO_WRAP);
+      byte[] encodedKey = Base64.decodeToBytes(publicKey.toString());
       Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
       signature.initVerify(
           instOf(KeyFactory.class).generatePublic(new X509EncodedKeySpec(encodedKey)));
       signature.update(src);
-      return signature.verify(Base64.decode(signed, Base64.NO_WRAP));
+      return signature.verify(Base64.decodeToBytes(signed));
     } catch (NoSuchAlgorithmException
         | InvocationTargetException
         | NoSuchMethodException
@@ -152,12 +151,12 @@ public abstract class RSA {
 
   public static byte[] sign(byte[] src, PrivateKey privateKey) {
     try {
-      byte[] encodedKey = Base64.decode(privateKey.toString(), Base64.NO_WRAP);
+      byte[] encodedKey = Base64.decodeToBytes(privateKey.toString());
       Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
       signature.initSign(
           instOf(KeyFactory.class).generatePrivate(new PKCS8EncodedKeySpec(encodedKey)));
       signature.update(src);
-      return Base64.encode(signature.sign(), Base64.NO_WRAP);
+      return Base64.encodeToBytes(signature.sign());
     } catch (NoSuchAlgorithmException
         | InvocationTargetException
         | NoSuchMethodException
