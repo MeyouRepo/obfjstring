@@ -206,9 +206,10 @@ public abstract class RSA {
     Objects.requireNonNull(is);
     final byte[] bytes = new byte[1024];
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    for (int len; (len = is.read(bytes)) != -1; baos.write(bytes, 0, len))
+    for (int len; (len = is.read(bytes)) != -1; baos.write(bytes, 0, len), baos.flush())
       ;
     String result = baos.toString();
+    baos.close();
     if (result.isEmpty()) {
       throw new NullPointerException("The content of Key cannot be empty.");
     }
