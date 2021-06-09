@@ -1,5 +1,8 @@
 package visitor;
 
+import com.liangchengj.obfjstring.AES;
+import com.liangchengj.obfjstring.Base64;
+import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.util.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +39,22 @@ public final class WhiteLists {
     //   addWhiteList("org", FLAG_PACKAGE);
 
     // default classes short name in white list.
-    addWhiteList("BuildConfig", FLAG_CLASS);
+    // addWhiteList("BuildConfig", FLAG_CLASS);
     addWhiteList("R", FLAG_CLASS);
+
+    addClassToWhiteList(AES.class);
+    addClassToWhiteList(Base64.class);
+    addClassToWhiteList(Base64.JDKBase64CodecType.class);
+    addClassToWhiteList(Base64.AndroidBase64CodecType.class);
+    addClassToWhiteList(Base64.AndroidBase64Flag.class);
+    addClassToWhiteList(JavaStringObfuscator.class);
   }
 
   private WhiteLists() {}
+
+  public static void addClassToWhiteList(Class<?> clazz) {
+    addWhiteList(JavaStringObfuscator.getJniStyleShortClassName(clazz), FLAG_CLASS);
+  }
 
   public static void addWhiteList(String name, int flag) {
     switch (flag) {

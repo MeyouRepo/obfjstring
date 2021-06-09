@@ -2,7 +2,6 @@ package visitor;
 
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.OooOO0OO;
-import com.liangchengj.obfjstring.RSA;
 import com.liangchengj.obfjstring.StringFieldOfClass;
 import com.liangchengj.obfjstring.util.TextUtils;
 import java.util.ArrayList;
@@ -40,8 +39,11 @@ public class StringFieldClassVisitor extends ClassVisitor {
   }
 
   private synchronized void doObfuscate(MethodVisitor mv, String str) {
-    RSA.KeyPair keyPair = RSA.genKeyPair();
-    byte[] encodeBytes = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
+    // RSA.KeyPair keyPair = RSA.genKeyPair();
+    // byte[] encodeBytes = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
+    String key = JavaStringObfuscator.genUUIDForAESKey();
+    String iv = JavaStringObfuscator.genUUIDForAESKey();
+    byte[] encodeBytes = OooOO0OO.encrypt(str, key, iv);
     int encodeBytesLen = encodeBytes.length;
     mv.visitIntInsn(Opcodes.SIPUSH, encodeBytesLen);
     mv.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_BYTE);
@@ -51,13 +53,19 @@ public class StringFieldClassVisitor extends ClassVisitor {
       mv.visitIntInsn(Opcodes.BIPUSH, encodeBytes[i]);
       mv.visitInsn(Opcodes.BASTORE);
     }
-    mv.visitLdcInsn(keyPair.getPrivateKey().toString());
+    // mv.visitLdcInsn(keyPair.getPrivateKey().toString());
+    mv.visitLdcInsn(key);
+    mv.visitLdcInsn(iv);
     mv.visitMethodInsn(
         Opcodes.INVOKESTATIC,
         JavaStringObfuscator.getJniStyleClassName(OooOO0OO.class),
         "OooOOoo0oo",
         String.format(
-            "(%s%s)%s", "[B", StringFieldOfClass.STRING_DESC, StringFieldOfClass.STRING_DESC),
+            "(%s%s%s)%s",
+            "[B",
+            StringFieldOfClass.STRING_DESC,
+            StringFieldOfClass.STRING_DESC,
+            StringFieldOfClass.STRING_DESC),
         false);
   }
 

@@ -1,8 +1,10 @@
+import com.liangchengj.obfjstring.AES;
 import com.liangchengj.obfjstring.Base64;
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.OooOO0OO;
 import com.liangchengj.obfjstring.RSA;
 import com.liangchengj.obfjstring.util.IOUtils;
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,7 +77,9 @@ public class ObfuseJarStringGradle {
     writeDepClassToVariant(variant, RSA.PrivateKey.class);
     writeDepClassToVariant(variant, RSA.PublicKey.class);
 
-    System.err.println("task completed");
+    writeDepClassToVariant(variant, AES.class);
+
+    System.err.println("Task completed");
   }
 
   private static void writeDepClassToVariant(String variant, Class<?> clazz) throws IOException {
@@ -122,8 +126,9 @@ public class ObfuseJarStringGradle {
     System.out.println("classFilePath >> " + classFilePath);
     String variantClassFilePath = variant + File.separator + separatorClassFilePath;
     System.out.println("variantClassFilePath >> " + variantClassFilePath);
+    ByteArrayInputStream bais = new ByteArrayInputStream(processClass(in));
     FileOutputStream fos = new FileOutputStream(variantClassFilePath);
-    IOUtils.readAndWrite(in, fos);
+    IOUtils.readAndWrite(bais, fos);
   }
 
   //  private static byte[] readClass() {

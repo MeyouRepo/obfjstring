@@ -1,3 +1,4 @@
+import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.OooOO0OO;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -81,7 +82,7 @@ public class ObfuseJarString {
           entryOut.setCompressedSize(-1);
           zos.putNextEntry(entryOut);
           if (!entryIn.isDirectory()) {
-            if (entryName.endsWith(".class")) {
+            if (entryName.endsWith(JavaStringObfuscator.JAVA_CLASS_FILE_EXT)) {
               processClass(zis, zos);
             } else {
               copy(zis, zos);

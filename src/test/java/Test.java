@@ -1,3 +1,4 @@
+import com.liangchengj.obfjstring.Base64;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
@@ -255,5 +256,10 @@ public class Test {
       n4 = n2;
     }
     return new String(arrc);
+  }
+
+  @org.junit.jupiter.api.Test
+  void testA() {
+    System.out.println(Base64.JDKBase64CodecType.class.getName());
   }
 }
