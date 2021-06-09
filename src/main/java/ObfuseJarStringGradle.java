@@ -1,4 +1,4 @@
-import me.liangchengj.obfjstring.OooOO0OO;
+import android.util.Base64;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import me.liangchengj.obfjstring.JavaStringObfuscator;
+import me.liangchengj.obfjstring.OooOO0OO;
 import me.liangchengj.obfjstring.RSA;
 import me.liangchengj.obfjstring.util.IOUtils;
 import org.objectweb.asm.ClassReader;
@@ -55,9 +56,12 @@ public class ObfuseJarStringGradle {
     writeDepClassToVariant(variant, OooOO0OO.class);
     writeDepClassToVariant(variant, JavaStringObfuscator.class);
     writeDepClassToVariant(variant, Base64.class);
-    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Coder.class");
-    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Decoder.class");
-    writeDepClassToVariant(variant, Base64.class.getClassLoader(),"android/util/Base64$Encoder.class");
+    writeDepClassToVariant(
+        variant, Base64.class.getClassLoader(), "android/util/Base64$Coder.class");
+    writeDepClassToVariant(
+        variant, Base64.class.getClassLoader(), "android/util/Base64$Decoder.class");
+    writeDepClassToVariant(
+        variant, Base64.class.getClassLoader(), "android/util/Base64$Encoder.class");
     writeDepClassToVariant(variant, RSA.class);
     writeDepClassToVariant(variant, RSA.KeyPair.class);
     writeDepClassToVariant(variant, RSA.PrivateKey.class);
