@@ -1,5 +1,6 @@
 package visitor;
 
+import me.liangchengj.obfjstring.JavaStringObfuscator;
 import me.liangchengj.obfjstring.OooOO0OO;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.objectweb.asm.Opcodes;
 public class StringFieldClassVisitor extends ClassVisitor {
 
   private static final String IGNORE_ANNOTATION = "Lcom/qtfreet/lib/annotation/StringIgnore;";
-  private static final String Xor_FLAG = OooOO0OO.class.getName().replace('.', '/');
 
   private boolean isClInitExists;
 
@@ -38,22 +38,22 @@ public class StringFieldClassVisitor extends ClassVisitor {
     super(Opcodes.ASM5, cw);
   }
 
-  private void doObfuscate(MethodVisitor mv, String str) {
+  private synchronized void doObfuscate(MethodVisitor mv, String str) {
     RSA.KeyPair keyPair = RSA.genKeyPair();
-    byte[] enc = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
-    int len = enc.length;
-    mv.visitIntInsn(Opcodes.SIPUSH, len);
+    byte[] encodeBytes = OooOO0OO.encrypt(str, keyPair.getPublicKey().toString());
+    int encodeBytesLen = encodeBytes.length;
+    mv.visitIntInsn(Opcodes.SIPUSH, encodeBytesLen);
     mv.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_BYTE);
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < encodeBytesLen; i++) {
       mv.visitInsn(Opcodes.DUP);
       mv.visitIntInsn(Opcodes.SIPUSH, i);
-      mv.visitIntInsn(Opcodes.BIPUSH, enc[i]);
+      mv.visitIntInsn(Opcodes.BIPUSH, encodeBytes[i]);
       mv.visitInsn(Opcodes.BASTORE);
     }
     mv.visitLdcInsn(keyPair.getPrivateKey().toString());
     mv.visitMethodInsn(
         Opcodes.INVOKESTATIC,
-        Xor_FLAG,
+        JavaStringObfuscator.getJniStyleClassName(OooOO0OO.class),
         "OooOOoo0oo",
         "([BLjava/lang/String;)Ljava/lang/String;",
         false);
