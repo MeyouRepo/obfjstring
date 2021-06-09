@@ -45,7 +45,7 @@ public final class JavaStringObfuscator {
 
   public static String genUUID(int len) {
     String uuid = UUID.randomUUID().toString().replace("-", "");
-    if (-1 == len) {
+    if (len <= 0) {
       return uuid;
     }
     return uuid.substring(0, len);
