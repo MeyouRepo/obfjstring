@@ -12,6 +12,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 /**
  * Visit the class to execute string fog.
@@ -60,12 +61,11 @@ public class StringFieldClassVisitor extends ClassVisitor {
         Opcodes.INVOKESTATIC,
         JavaStringObfuscator.getJNIStyleClassName(OooOO0OO.class),
         "OooOOoo0oo",
-        String.format(
-            "(%s%s%s)%s",
-            "[B",
-            StringFieldOfClass.STRING_SIG,
-            StringFieldOfClass.STRING_SIG,
-            StringFieldOfClass.STRING_SIG),
+        Type.getMethodDescriptor(
+            Type.getType(String.class),
+            Type.getType(byte[].class),
+            Type.getType(String.class),
+            Type.getType(String.class)),
         false);
   }
 
