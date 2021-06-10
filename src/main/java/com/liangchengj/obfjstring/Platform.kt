@@ -15,4 +15,16 @@ object Platform {
             false
         }
     }
+
+
+    @JvmStatic
+    fun isUnity(): Boolean {
+        return try {
+            Class.forName("com.unity3d.player.UnityPlayer")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
+
 }
