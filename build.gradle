@@ -12,7 +12,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ObfuseJarStringGradle'
+        attributes 'Main-Class': 'ObfuscateJavaString'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

@@ -4,7 +4,7 @@ import com.liangchengj.obfjstring.AES;
 import com.liangchengj.obfjstring.Base64;
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.util.TextUtils;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,13 +14,13 @@ import java.util.List;
  * @author Megatron King
  * @since 2017/3/7 19:34
  */
-public final class WhiteLists {
+public final class WhiteList {
 
   public static final int FLAG_PACKAGE = 0;
   public static final int FLAG_CLASS = 1;
 
-  private static final List<String> PACKAGE_WHITE_LIST = new ArrayList<>();
-  private static final List<String> CLASS_WHITE_LIST = new ArrayList<>();
+  private static final List<String> PACKAGE_WHITE_LIST = new LinkedList<>();
+  private static final List<String> CLASS_WHITE_LIST = new LinkedList<>();
 
   static {
     // default packages in white list.
@@ -50,7 +50,7 @@ public final class WhiteLists {
     addClassToWhiteList(JavaStringObfuscator.class);
   }
 
-  private WhiteLists() {}
+  private WhiteList() {}
 
   public static void addClassToWhiteList(Class<?> clazz) {
     addWhiteList(JavaStringObfuscator.getJNIStyleShortClassName(clazz), FLAG_CLASS);

@@ -1,5 +1,6 @@
 package visitor;
 
+import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.OooOO0OO;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -16,11 +17,11 @@ public final class ClassVisitorFactory {
   private ClassVisitorFactory() {}
 
   public static ClassVisitor create(String className, ClassWriter cw) {
-    if (OooOO0OO.class.getName().replace('.', '/').equals(className)) {
+    if (JavaStringObfuscator.getJNIStyleClassName(OooOO0OO.class).equals(className)) {
       return createEmpty(cw);
     }
-    if (WhiteLists.inWhiteList(className, WhiteLists.FLAG_PACKAGE)
-        || WhiteLists.inWhiteList(className, WhiteLists.FLAG_CLASS)) {
+    if (WhiteList.inWhiteList(className, WhiteList.FLAG_PACKAGE)
+        || WhiteList.inWhiteList(className, WhiteList.FLAG_CLASS)) {
       return createEmpty(cw);
     }
     return new StringFieldClassVisitor(cw);

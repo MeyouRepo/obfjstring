@@ -22,7 +22,7 @@ import org.objectweb.asm.ClassWriter;
 import visitor.ClassVisitorFactory;
 
 /** Created by qtfreet on 2017/3/14. */
-public class ObfuseJarString {
+public class ObfuscateJarString {
   private static final String encryptFile = OooOO0OO.class.getName().replace(".", "/") + ".class";
 
   public static void main(String[] args) throws IOException {

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Created by qtfreet on 2017/2/24. */
-public class ObfuseSmaliString {
+public class ObfuscateSmaliString {
 
   private static List<String> filelist = new ArrayList();
 
@@ -56,7 +56,7 @@ public class ObfuseSmaliString {
         file.mkdir();
       }
       InputStream resourceAsStream =
-          ObfuseSmaliString.class.getResourceAsStream("/qtfreet00.smali");
+          ObfuscateSmaliString.class.getResourceAsStream("/qtfreet00.smali");
       InputStreamReader read = new InputStreamReader(resourceAsStream);
       BufferedReader br = new BufferedReader(read);
       String str = "";

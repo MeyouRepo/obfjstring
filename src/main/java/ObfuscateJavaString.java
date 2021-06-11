@@ -20,7 +20,7 @@ import org.objectweb.asm.ClassWriter;
 import visitor.ClassVisitorFactory;
 
 /** Created by qtfreet on 2017/3/14. */
-public class ObfuseJarStringGradle {
+public class ObfuscateJavaString {
   //  private static final String encryptFile = OooOO0OO.class.getName().replace(".", "/") +
   // ".class";
   //  private static final String separator = File.separator;
