@@ -36,11 +36,11 @@ public final class WhiteList {
     addWhiteList("mozilla", FLAG_PACKAGE);
     addWhiteList("okhttp3", FLAG_PACKAGE);
     addWhiteList("okio", FLAG_PACKAGE);
-    //   addWhiteList("org", FLAG_PACKAGE);
+    // addWhiteList("org", FLAG_PACKAGE);
 
     // default classes short name in white list.
     // addWhiteList("BuildConfig", FLAG_CLASS);
-    addWhiteList("R", FLAG_CLASS);
+    // addWhiteList("R", FLAG_CLASS);
 
     addClassToWhiteList(AES.class);
     addClassToWhiteList(Base64.class);

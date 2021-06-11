@@ -141,7 +141,7 @@ public class ObfuscateSmaliString {
           String enc = qtfreet00.encode(tmp);
           // 混淆字符串
           String sign = "    const-string " + register + ", " + "\"" + enc + "\"";
-          String dec = "";
+          String dec;
           if (Integer.parseInt(register.substring(1)) > 15 && register.startsWith("v")) {
             // 此处考虑寄存器个数，如果v寄存器大于15时，应使用range方式传参
             dec =

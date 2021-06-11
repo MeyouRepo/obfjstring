@@ -1,14 +1,13 @@
 import com.liangchengj.obfjstring.JavaStringObfuscator;
-import com.liangchengj.obfjstring.OooOO0OO;
+import com.liangchengj.obfjstring.Resource;
+import com.liangchengj.obfjstring.io.Stream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,17 +15,15 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import visitor.ClassVisitorFactory;
 
-/** Created by qtfreet on 2017/3/14. */
+/**
+ * Created at 2021/6/11 11:17
+ *
+ * @author Liangcheng Juves
+ */
 public class ObfuscateJarString {
-  private static final String encryptFile = OooOO0OO.class.getName().replace(".", "/") + ".class";
 
   public static void main(String[] args) throws IOException {
-    byte b[] = readClass();
     System.out.println("请输入jar包路径:");
     Scanner scanner = new Scanner(System.in);
     String path = scanner.next();
@@ -36,12 +33,12 @@ public class ObfuscateJarString {
     }
     int index = path.lastIndexOf(".jar");
     File jarIn = new File(path);
-    File jarOut = new File(path.substring(0, index) + "obfused.jar");
+    File jarOut = new File(path.substring(0, index) + "obfuscated.jar");
     try {
-      processJar(jarIn, jarOut, Charset.forName("UTF-8"), Charset.forName("UTF-8"), b);
+      processJar(jarIn, jarOut, Charset.forName("UTF-8"), Charset.forName("UTF-8"));
     } catch (IllegalArgumentException e) {
       if ("MALFORMED".equals(e.getMessage())) {
-        processJar(jarIn, jarOut, Charset.forName("GBK"), Charset.forName("UTF-8"), b);
+        processJar(jarIn, jarOut, Charset.forName("GBK"), Charset.forName("UTF-8"));
       } else {
         throw e;
       }
@@ -49,28 +46,11 @@ public class ObfuscateJarString {
     System.out.println("混淆完成");
   }
 
-  private static byte[] readClass() {
-    InputStream in = null;
-    try {
-      in = OooOO0OO.class.getClassLoader().getResourceAsStream(encryptFile);
-      int len = in.available();
-      byte[] b = new byte[len];
-      in.read(b);
-      in.close();
-      return b;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  private static void processJar(
-      File jarIn, File jarOut, Charset charsetIn, Charset charsetOut, byte[] out)
+  private static void processJar(File jarIn, File jarOut, Charset charsetIn, Charset charsetOut)
       throws IOException {
     ZipInputStream zis = null;
     ZipOutputStream zos = null;
     try {
-
       zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(jarIn)), charsetIn);
       zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(jarOut)), charsetOut);
       ZipEntry entryIn;
@@ -83,55 +63,66 @@ public class ObfuscateJarString {
           zos.putNextEntry(entryOut);
           if (!entryIn.isDirectory()) {
             if (entryName.endsWith(JavaStringObfuscator.JAVA_CLASS_FILE_EXT)) {
-              processClass(zis, zos);
+              ObfuscateClassString.obfuscateClass(zis, zos);
             } else {
-              copy(zis, zos);
+              Stream.readAndWrite(zis, zos);
             }
           }
           zos.closeEntry();
           processedEntryNamesMap.put(entryName, 1);
         }
       }
-      ZipEntry eninject = new ZipEntry(encryptFile);
-      zos.putNextEntry(eninject);
-      zos.write(out);
-      zos.closeEntry();
+
+      for (Object depClassDesc : DepClassDescList.get()) {
+        if (depClassDesc instanceof String) {
+          writeDepClassToJar(zos, (String) depClassDesc);
+        } else if (depClassDesc instanceof Class) {
+          writeDepClassToJar(zos, (Class<?>) depClassDesc);
+        }
+      }
 
     } finally {
-      closeQuietly(zos);
-      closeQuietly(zis);
+      zos.close();
+      zis.close();
     }
   }
 
-  private static void processClass(InputStream classIn, OutputStream classOut) throws IOException {
-    ClassReader cr = new ClassReader(classIn);
-    ClassWriter cw = new ClassWriter(1);
-    ClassVisitor aia = ClassVisitorFactory.create(cr.getClassName(), cw);
-    //   ClassVisitor aia = new TestClassVisitor("", cw);
-    cr.accept(aia, 0);
+  private static void writeDepClassToJar(ZipOutputStream zos, String classFilePath)
+      throws IOException {
 
-    classOut.write(cw.toByteArray());
-    classOut.flush();
+    InputStream in = Resource.getAsStream(classFilePath);
+    if (null == in) {
+      throw new NullPointerException("null == in");
+    }
+    System.out.println("classFilePath >> " + classFilePath);
+
+    ZipEntry classFile = new ZipEntry(classFilePath);
+    zos.putNextEntry(classFile);
+    zos.write(ObfuscateClassString.obfuscateClassToBytes(in));
+    zos.flush();
+    zos.closeEntry();
+    in.close();
   }
 
-  private static void closeQuietly(Closeable target) {
-    if (target != null) {
+  private static void writeDepClassToJar(ZipOutputStream zos, Class<?> clazz) throws IOException {
+    String classFilePath =
+        JavaStringObfuscator.getJNIStyleClassName(clazz) + JavaStringObfuscator.JAVA_CLASS_FILE_EXT;
+    writeDepClassToJar(zos, classFilePath);
+
+    int i = 1;
+    while (true) {
       try {
-        target.close();
-      } catch (Exception e) {
-        // Ignored.
+        String tryClassFilePath =
+            String.format(
+                "%s$%d%s",
+                classFilePath.substring(0, classFilePath.lastIndexOf('.')),
+                i,
+                JavaStringObfuscator.JAVA_CLASS_FILE_EXT);
+        writeDepClassToJar(zos, tryClassFilePath);
+        i++;
+      } catch (Throwable tr) {
+        return;
       }
     }
-  }
-
-  private static int copy(InputStream in, OutputStream out) throws IOException {
-    int total = 0;
-    byte[] buffer = new byte[8192];
-    int c;
-    while ((c = in.read(buffer)) != -1) {
-      total += c;
-      out.write(buffer, 0, c);
-    }
-    return total;
   }
 }
