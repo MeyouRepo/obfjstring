@@ -1,3 +1,5 @@
+package com.liangchengj.obfjstring.main;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +26,7 @@ public class ObfuscateSmaliString {
     String packagePath;
     /*
     * please enter the apk decompiled path:
-      C:\Users\qtfreet00\Desktop\signed
+      C:\Users\com.liangchengj.obfjstring.main.qtfreet00\Desktop\signed
       please enter the package path which u want to string obfuscation (such as com.qtfreet.example):
       com.manyi.mobile.activity
       mission completed
@@ -56,7 +58,7 @@ public class ObfuscateSmaliString {
         file.mkdir();
       }
       InputStream resourceAsStream =
-          ObfuscateSmaliString.class.getResourceAsStream("/qtfreet00.smali");
+          ObfuscateSmaliString.class.getResourceAsStream("/com.liangchengj.obfjstring.main.qtfreet00.smali");
       InputStreamReader read = new InputStreamReader(resourceAsStream);
       BufferedReader br = new BufferedReader(read);
       String str = "";
@@ -64,7 +66,7 @@ public class ObfuscateSmaliString {
       while ((str = br.readLine()) != null) {
         sb.append(str).append("\n");
       }
-      FileOutputStream fos = new FileOutputStream(new File(path + "\\qtfreet00.smali"));
+      FileOutputStream fos = new FileOutputStream(new File(path + "\\com.liangchengj.obfjstring.main.qtfreet00.smali"));
       fos.write(sb.toString().getBytes("UTF-8"));
       fos.flush();
       fos.close();
@@ -149,7 +151,7 @@ public class ObfuscateSmaliString {
                     + register
                     + " .. "
                     + register
-                    + "}, Lcom/qtfreet00;->decode(Ljava/lang/String;)Ljava/lang/String;";
+                    + "}, Lcom/com.liangchengj.obfjstring.main.qtfreet00;->decode(Ljava/lang/String;)Ljava/lang/String;";
             // 添加解密方法
           } else if (register.startsWith("v")
               || (register.startsWith("p") && Integer.parseInt(register.substring(1)) < 10)) {
@@ -158,7 +160,7 @@ public class ObfuscateSmaliString {
             dec =
                 "    invoke-static {"
                     + register
-                    + "}, Lcom/qtfreet00;->decode(Ljava/lang/String;)Ljava/lang/String;";
+                    + "}, Lcom/com.liangchengj.obfjstring.main.qtfreet00;->decode(Ljava/lang/String;)Ljava/lang/String;";
           } else {
             sb.append(str).append("\n");
             continue;

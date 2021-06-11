@@ -1,4 +1,4 @@
-/** Created by qtfreet on 2017/2/24. */
+package com.liangchengj.obfjstring.main; /** Created by qtfreet on 2017/2/24. */
 import java.io.ByteArrayOutputStream;
 
 public class qtfreet00 {

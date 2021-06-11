@@ -1,3 +1,5 @@
+package com.liangchengj.obfjstring.main;
+
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.Resource;
 import com.liangchengj.obfjstring.io.Stream;

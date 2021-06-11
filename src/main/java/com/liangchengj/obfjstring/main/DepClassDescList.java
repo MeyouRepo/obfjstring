@@ -1,3 +1,5 @@
+package com.liangchengj.obfjstring.main;
+
 import com.liangchengj.obfjstring.AES;
 import com.liangchengj.obfjstring.Base64;
 import com.liangchengj.obfjstring.JavaStringObfuscator;

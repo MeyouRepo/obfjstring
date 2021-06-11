@@ -1,3 +1,5 @@
+package com.liangchengj.obfjstring.main;
+
 import com.liangchengj.obfjstring.JavaStringObfuscator;
 import com.liangchengj.obfjstring.Resource;
 import com.liangchengj.obfjstring.io.Stream;
@@ -68,18 +70,24 @@ public class ObfuscateClassString {
 
     System.out.println();
     System.out.println("Start write dep classes ===================");
-
-    for (Object depClassDesc : DepClassDescList.get()) {
-      if (depClassDesc instanceof String) {
-        writeDepClassToVariant(cmdOptions, (String) depClassDesc);
-      } else if (depClassDesc instanceof Class) {
-        writeDepClassToVariant(cmdOptions, (Class<?>) depClassDesc);
-      }
-    }
-
+    writeDepClassToVariant(cmdOptions);
     System.out.println("End write dep classes ===================");
     System.out.println();
     System.out.println("Obfuscate string in java class file completed !!!");
+  }
+
+  public static void writeDepClassToVariant(CmdOptions cmdOptions) throws IOException {
+    writeDepClassToVariant(cmdOptions.variant);
+  }
+
+  public static void writeDepClassToVariant(String variant) throws IOException {
+    for (Object depClassDesc : DepClassDescList.get()) {
+      if (depClassDesc instanceof String) {
+        writeDepClassToVariant(variant, (String) depClassDesc);
+      } else if (depClassDesc instanceof Class) {
+        writeDepClassToVariant(variant, (Class<?>) depClassDesc);
+      }
+    }
   }
 
   private static void writeDepClassToVariant(CmdOptions cmdOptions, Class<?> clazz)
@@ -140,12 +148,12 @@ public class ObfuscateClassString {
     obfuscateClass(in, fos);
   }
 
-  private static void processClassFile(String path) throws IOException {
+  public static void processClassFile(String path) throws IOException {
     FileInputStream fis = new FileInputStream(path);
     File outFile = new File(path + ".tmp");
     FileOutputStream fos = new FileOutputStream(outFile);
 
-    Stream.readAndWrite(obfuscateClassToInputStream(fis), fos);
+    obfuscateClass(fis, fos);
 
     File file = new File(path);
     if (file.exists()) {
@@ -154,7 +162,7 @@ public class ObfuscateClassString {
     }
   }
 
-  static InputStream obfuscateClassToInputStream(InputStream classIn) throws IOException {
+  public static InputStream obfuscateClassToInputStream(InputStream classIn) throws IOException {
     Objects.requireNonNull(classIn);
     ClassReader cr = new ClassReader(classIn);
     ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -164,14 +172,18 @@ public class ObfuscateClassString {
     return bais;
   }
 
-  static byte[] obfuscateClassToBytes(InputStream classIn) throws IOException {
+  public static byte[] obfuscateClassToBytes(InputStream classIn) throws IOException {
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     Stream.readAndWrite(obfuscateClassToInputStream(classIn), baos);
     return baos.toByteArray();
   }
 
-  static void obfuscateClass(InputStream classIn, OutputStream out) throws IOException {
+  public static void obfuscateClass(InputStream classIn, OutputStream out) throws IOException {
     Stream.readAndWrite(obfuscateClassToInputStream(classIn), out);
+  }
+
+  public static void obfuscateClass(byte[] bytes, OutputStream out) throws IOException {
+    obfuscateClass(new ByteArrayInputStream(bytes), out);
   }
 
   /**
