@@ -1,4 +1,4 @@
-group 'org.example'
+group 'com.liangchengj.obfjstring'
 version '1.0'
 
 buildscript {
@@ -27,10 +27,10 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            pom.groupId = 'org.example'
-            pom.artifactId = 'gradle-plugin'
+            pom.groupId = 'com.liangchengj.obfjstring'
+            pom.artifactId = 'gradle'
             pom.version = project.version
-            repository(url: uri('/home/dj/.m2/repository'))
+            repository(url: mavenLocal().url)
         }
     }
 }

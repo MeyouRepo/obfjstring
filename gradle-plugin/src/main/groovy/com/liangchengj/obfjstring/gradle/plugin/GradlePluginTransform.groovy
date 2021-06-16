@@ -1,5 +1,6 @@
 package com.liangchengj.obfjstring.gradle.plugin
 
+
 import com.android.build.api.transform.DirectoryInput
 import com.android.build.api.transform.Format
 import com.android.build.api.transform.JarInput
@@ -19,7 +20,7 @@ import org.apache.commons.io.FileUtils
 class GradlePluginTransform extends Transform {
     @Override
     String getName() {
-        return getClass().simpleName
+        return 'ObfuscateJavaString'
     }
 
     @Override
@@ -39,27 +40,41 @@ class GradlePluginTransform extends Transform {
         return false
     }
 
+
     @Override
     void transform(TransformInvocation transformInvocation)
             throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
+        def lineS = "=============================="
+        println("Start classes obfuscate ${lineS}")
         transformInvocation.inputs.each { input ->
             input.directoryInputs.each { directoryInput ->
                 directoryInput.file.eachFileRecurse { file ->
                     if (file.name.endsWith(JavaStringObfuscator.JAVA_CLASS_FILE_EXT)) {
-                        println("${file.path} >>>>>>>>>>>>>>>>>>>>>>>>>\n")
-                        println("${file.absolutePath}: \n\t${file.text}\n")
-                        ObfuscateClassString.processClassFile(file.absolutePath)
+                        def fAbsolutePath = file.absolutePath
+                        ObfuscateClassString.processClassFile(fAbsolutePath)
+                        println("\tObfuscated class file: ${fAbsolutePath}")
                     }
                 }
 
-                // ObfuscateClassString.writeDepClassToVariant()
+                println("End classes obfuscate ${lineS}")
+                println()
+
+                def directoryInputFileAbsolutePath = directoryInput.file.absolutePath
+                if (directoryInputFileAbsolutePath.contains('intermediates')
+                        && directoryInputFileAbsolutePath.contains('javac')) {
+                    println("Start write dep classes ${lineS}")
+                    ObfuscateClassString.writeDepClassToVariant(directoryInputFileAbsolutePath)
+                    println("End write dep classes ${lineS}")
+                }
+
                 copyDir(directoryInput, transformInvocation.outputProvider)
             }
             input.jarInputs.each { jarInput ->
                 copyJar(jarInput, transformInvocation.outputProvider)
             }
         }
+        println("Obfuscate java string completed !!!")
     }
 
     private void copyDir(DirectoryInput directoryInput, TransformOutputProvider outputProvider) {
