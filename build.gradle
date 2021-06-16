@@ -47,3 +47,10 @@ compileTestKotlin {
     }
 }
 
+task copyTestClasses(dependsOn: [clean, compileTestJava]) {
+    copy {
+        from("${rootDir}/build/classes/java/test")
+        into("${rootDir}/classes")
+    }
+}
+
