@@ -1,4 +1,4 @@
-# obfuscate-java-string
+# obfjstring
 ## Android Library
 ```groovy
 android.libraryVariants.all { variant ->
@@ -7,7 +7,7 @@ android.libraryVariants.all { variant ->
         javaexec {
             main = "-jar";
             args = [
-                    "obfuscate-java-string-1.0-SNAPSHOT.jar",
+                    "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
                     variantJavaCompile.destinationDir
             ]
@@ -24,7 +24,7 @@ android.applicationVariants.all { variant ->
         javaexec {
             main = "-jar";
             args = [
-                    "obfuscate-java-string-1.0-SNAPSHOT.jar",
+                    "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
                     variantJavaCompile.destinationDir
             ]
