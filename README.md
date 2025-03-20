@@ -1,4 +1,8 @@
 # obfjstring
+## Tell a joke: Dogs can't change to eat shit
+
+******
+
 ## Android Library
 ```groovy
 android.libraryVariants.all { variant ->
