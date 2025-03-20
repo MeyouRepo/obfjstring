@@ -1,5 +1,5 @@
 # obfjstring
-## Tell a joke: Dogs can't change to eat shit
+## Tell a joke: Dogs can't change to eat shit ...
 
 ******
 
