@@ -1,9 +1,9 @@
 package visitor;
 
-import com.liangchengj.obfjstring.AES;
-import com.liangchengj.obfjstring.Base64;
-import com.liangchengj.obfjstring.JavaStringObfuscator;
-import com.liangchengj.obfjstring.util.TextUtils;
+import com.lcjuves.obfjstring.AES;
+import com.lcjuves.obfjstring.Base64;
+import com.lcjuves.obfjstring.JavaStringObfuscator;
+import com.lcjuves.obfjstring.util.TextUtils;
 import java.util.LinkedList;
 import java.util.List;
 

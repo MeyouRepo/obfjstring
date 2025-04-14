@@ -1,4 +1,4 @@
-package com.liangchengj.obfjstring.gradle.plugin
+package com.lcjuves.obfjstring.gradle.plugin
 
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.Plugin

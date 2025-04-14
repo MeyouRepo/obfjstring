@@ -1,4 +1,4 @@
-group 'com.liangchengj.obfjstring'
+group 'com.lcjuves.obfjstring'
 version '1.0'
 
 buildscript {
@@ -27,7 +27,7 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            pom.groupId = 'com.liangchengj.obfjstring'
+            pom.groupId = 'com.lcjuves.obfjstring'
             pom.artifactId = 'gradle'
             pom.version = project.version
             repository(url: mavenLocal().url)

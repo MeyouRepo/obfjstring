@@ -9,7 +9,7 @@ public class StringsTest {
 
   static {
     CLASS_SIMPLE_NAME = StringsTest.class.getSimpleName();
-    URL_GITHUB = "https://github.liangchengj.com";
+    URL_GITHUB = "https://github.lcjuves.com";
   }
 
   public void setToday(String today) {

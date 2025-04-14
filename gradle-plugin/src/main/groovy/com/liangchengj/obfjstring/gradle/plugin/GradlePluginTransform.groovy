@@ -1,4 +1,4 @@
-package com.liangchengj.obfjstring.gradle.plugin
+package com.lcjuves.obfjstring.gradle.plugin
 
 
 import com.android.build.api.transform.DirectoryInput
@@ -11,9 +11,9 @@ import com.android.build.api.transform.TransformInvocation
 import com.android.build.api.transform.TransformOutputProvider
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.google.common.collect.ImmutableSet
-import com.liangchengj.obfjstring.JavaStringObfuscator
-import com.liangchengj.obfjstring.io.Stream
-import com.liangchengj.obfjstring.main.ObfuscateClassString
+import com.lcjuves.obfjstring.JavaStringObfuscator
+import com.lcjuves.obfjstring.io.Stream
+import com.lcjuves.obfjstring.main.ObfuscateClassString
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 

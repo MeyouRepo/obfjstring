@@ -1,7 +1,7 @@
 package visitor;
 
-import com.liangchengj.obfjstring.JavaStringObfuscator;
-import com.liangchengj.obfjstring.OooOO0OO;
+import com.lcjuves.obfjstring.JavaStringObfuscator;
+import com.lcjuves.obfjstring.OooOO0OO;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;

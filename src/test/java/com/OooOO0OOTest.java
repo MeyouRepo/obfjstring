@@ -1,7 +1,7 @@
 // package com;
 //
-// import com.liangchengj.obfjstring.OooOO0OO;
-// import com.liangchengj.obfjstring.RSA;
+// import com.lcjuves.obfjstring.OooOO0OO;
+// import com.lcjuves.obfjstring.RSA;
 // import java.io.ByteArrayInputStream;
 // import java.io.IOException;
 // import org.junit.jupiter.api.Test;

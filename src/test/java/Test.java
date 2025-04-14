@@ -1,4 +1,4 @@
-import com.liangchengj.obfjstring.Base64;
+import com.lcjuves.obfjstring.Base64;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;

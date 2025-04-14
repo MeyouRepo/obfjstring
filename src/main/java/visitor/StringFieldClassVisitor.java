@@ -1,9 +1,9 @@
 package visitor;
 
-import com.liangchengj.obfjstring.JavaStringObfuscator;
-import com.liangchengj.obfjstring.OooOO0OO;
-import com.liangchengj.obfjstring.StringFieldOfClass;
-import com.liangchengj.obfjstring.util.TextUtils;
+import com.lcjuves.obfjstring.JavaStringObfuscator;
+import com.lcjuves.obfjstring.OooOO0OO;
+import com.lcjuves.obfjstring.StringFieldOfClass;
+import com.lcjuves.obfjstring.util.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.objectweb.asm.AnnotationVisitor;
