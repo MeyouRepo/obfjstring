@@ -40,7 +40,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     implementation localGroovy()
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation gradleApi()
     implementation "com.android.tools.build:gradle:4.1.3"
 
