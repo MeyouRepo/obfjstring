@@ -6,15 +6,15 @@
 
 ## Android Library
 ```groovy
-android.libraryVariants.all { variant ->
+android.libraryVariants.configureEach { variant ->
     def variantJavaCompile = variant.getJavaCompileProvider().get()
     variantJavaCompile.doLast {
         javaexec {
-            main = "-jar";
+            mainClass = "com.lcjuves.obfjstring.main.ObfuscateClassString"
             args = [
                     "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
-                    variantJavaCompile.destinationDir
+                    variantJavaCompile.destinationDirectory
             ]
         }
     }
@@ -23,15 +23,15 @@ android.libraryVariants.all { variant ->
 
 ## Android Application
 ```groovy
-android.applicationVariants.all { variant ->
+android.applicationVariants.configureEach { variant ->
     def variantJavaCompile = variant.getJavaCompileProvider().get()
     variantJavaCompile.doLast {
         javaexec {
-            main = "-jar";
+            mainClass = "com.lcjuves.obfjstring.main.ObfuscateClassString"
             args = [
                     "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
-                    variantJavaCompile.destinationDir
+                    variantJavaCompile.destinationDirectory
             ]
         }
     }
