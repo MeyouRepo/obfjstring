@@ -10,8 +10,8 @@ android.libraryVariants.configureEach { variant ->
     def variantJavaCompile = variant.getJavaCompileProvider().get()
     variantJavaCompile.doLast {
         javaexec {
-            mainClass = "com.lcjuves.obfjstring.main.ObfuscateClassString"
             args = [
+                    "-jar",
                     "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
                     variantJavaCompile.destinationDirectory
@@ -27,8 +27,8 @@ android.applicationVariants.configureEach { variant ->
     def variantJavaCompile = variant.getJavaCompileProvider().get()
     variantJavaCompile.doLast {
         javaexec {
-            mainClass = "com.lcjuves.obfjstring.main.ObfuscateClassString"
             args = [
+                    "-jar",
                     "obfjstring-1.0-SNAPSHOT.jar",
                     project.name,
                     variantJavaCompile.destinationDirectory
